@@ -28,7 +28,7 @@ class Actor(tf.keras.Model):
         mu_output = Lambda(lambda x: x * self.action_bound)(out_mu)
         std_output = Dense(self.action_size, activation='softplus')(dense_2)
         return tf.keras.models.Model(state_input, [mu_output, std_output])
-
+    
     def compute_loss(self, actions, mu, std, advantages):
         # log_policy_pdf = self.log_pdf(mu, std, actions)
         std = tf.clip_by_value(std, self.std_bound[0], self.std_bound[1])
@@ -88,7 +88,6 @@ class A2CAgent():
         self.action_size = self.env.action_space.shape[0]
         self.action_bound = self.env.action_space.high[0]
         self.std_bound = [1e-2, 1.0]
-        
         self.gamma = gamma
         
         self.actor = Actor(self.state_size, self.action_size,
@@ -125,11 +124,10 @@ class A2CAgent():
             done = False
             state = self.env.reset()
             
-            states  = []
-            actions = []
+            states      = []
+            actions     = []
             td_targets = []
             advatnages = []
-
             while not done:
                 action = self.get_action(state)
                 action = np.clip(action, -self.action_bound, self.action_bound)
@@ -167,7 +165,6 @@ class A2CAgent():
                     td_targets = []
                     advatnages = []
 
-
             print('EP{} EpisodeReward={}'.format(episode+1, episode_reward))
             episode += 1
 
@@ -178,9 +175,9 @@ if __name__ == "__main__":
     actor_lr = 0.0005
     critic_lr = 0.001
     gamma = 0.99
-    
     hidden_size = 128
     update_interval = 50
+    
     max_episodes = 500  # Set total number of episodes to train agent on.
     agent = A2CAgent(env_name, gamma)
     agent.train()

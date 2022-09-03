@@ -104,7 +104,6 @@ class Worker(Thread):
         return np.random.choice(self.action_size, p=probs[0])
     
         
-
     def td_target(self, reward, next_state, done):
         if done:
             return reward
@@ -133,11 +132,10 @@ class Worker(Thread):
             done = False
             state = self.env.reset()
             
-            states  = []
-            actions = []
+            states     = []
+            actions    = []
             td_targets = []
             advatnages = []
-
             while not done:
                 action = self.get_action(state)
                 
@@ -151,7 +149,6 @@ class Worker(Thread):
                 td_target = self.td_target(reward * 0.01, next_state, done)
                 advantage = self.advatnage(
                     td_target, self.critic.model.predict(state))
-                
                 states.append(state)
                 actions.append(action)
                 td_targets.append(td_target)
@@ -169,6 +166,7 @@ class Worker(Thread):
                     actor_loss = self.global_actor.train(states, actions, advantages)
                     critic_loss = self.global_critic.train(states, td_targets)
 
+                    self.sync_with_global()
                     states     = []
                     actions    = []
                     td_targets = []
@@ -222,9 +220,9 @@ if __name__ == "__main__":
     actor_lr = 0.0005
     critic_lr = 0.001
     gamma = 0.99
-    
     hidden_size = 128
     update_interval = 50
+    
     max_episodes = 500  # Set total number of episodes to train agent on.
     agent = A3CAgent(env_name, gamma)
     agent.train()

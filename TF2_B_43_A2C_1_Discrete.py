@@ -122,9 +122,9 @@ class A2CAgent():
             done = False
             state = self.env.reset()
             
-            states  = []
-            actions = []
-            rewards = []
+            states     = []
+            actions    = []
+            rewards    = []
             
             while not done:
                 action = self.get_action(state)

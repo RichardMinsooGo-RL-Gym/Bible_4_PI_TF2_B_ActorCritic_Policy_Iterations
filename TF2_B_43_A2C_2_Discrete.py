@@ -118,11 +118,10 @@ class A2CAgent():
             done = False
             state = self.env.reset()
             
-            states  = []
-            actions = []
+            states     = []
+            actions    = []
             td_targets = []
             advatnages = []
-
             while not done:
                 action = self.get_action(state)
                 
@@ -159,7 +158,6 @@ class A2CAgent():
                     td_targets = []
                     advatnages = []
 
-
             print('EP{} EpisodeReward={}'.format(episode+1, episode_reward))
             episode += 1
 
@@ -170,9 +168,9 @@ if __name__ == "__main__":
     actor_lr = 0.0005
     critic_lr = 0.001
     gamma = 0.99
-    
     hidden_size = 128
     update_interval = 50
+    
     max_episodes = 500  # Set total number of episodes to train agent on.
     agent = A2CAgent(env_name, gamma)
     agent.train()

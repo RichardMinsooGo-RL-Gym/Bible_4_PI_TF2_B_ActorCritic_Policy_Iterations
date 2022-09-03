@@ -137,19 +137,18 @@ class Worker(Thread):
             done = False
             state = self.env.reset()
             
-            states  = []
-            actions = []
-            rewards = []
-
+            states     = []
+            actions    = []
+            rewards    = []
+            
             while not done:
                 action = self.get_action(state)
                 
                 next_state, reward, done, _ = self.env.step(action)
                 
-                state  = np.reshape(state, [1, self.state_size])
-                action = np.reshape(action, [1, 1])
-                reward = np.reshape(reward, [1, 1])
-                
+                state      = np.reshape(state, [1, self.state_size])
+                action     = np.reshape(action, [1, 1])
+                reward     = np.reshape(reward, [1, 1])
                 next_state = np.reshape(next_state, [1, self.state_size])
                 
                 states.append(state)
@@ -175,7 +174,6 @@ class Worker(Thread):
                     critic_loss = self.global_critic.train(states, td_targets)
 
                     self.sync_with_global()
-                    
                     states     = []
                     actions    = []
                     rewards    = []
@@ -228,9 +226,9 @@ if __name__ == "__main__":
     actor_lr = 0.0005
     critic_lr = 0.001
     gamma = 0.99
-    
     hidden_size = 128
     update_interval = 50
+    
     max_episodes = 500  # Set total number of episodes to train agent on.
     agent = A3CAgent(env_name, gamma)
     agent.train()
